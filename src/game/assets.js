@@ -6,9 +6,9 @@ game.module(
 )
 .body(function() {
 
-game.addAsset('media/particle.png');
-game.addAsset('media/panda.png');
-game.addAsset('media/panda2.png');
-game.addAsset('media/font.fnt');
+game.addAsset('particle.png');
+game.addAsset('panda.png');
+game.addAsset('panda2.png');
+game.addAsset('font.fnt');
 
 });

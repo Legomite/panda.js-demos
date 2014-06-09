@@ -8,14 +8,17 @@ game.module(
 )
 .body(function(){
 
-game.icon = 'media/icons/cursor.png';
+game.icon = 'icons/cursor.png';
 game.addAsset(game.icon);
 
 Panda = game.Sprite.extend({
-    path: 'media/panda2.png',
     interactive: true,
-    anchor: {x:0.5, y:0.5},
-    offset: {x:0, y:0},
+    anchor: { x: 0.5, y: 0.5 },
+    offset: { x: 0, y: 0 },
+
+    init: function(x, y) {
+        this._super('panda2.png', x, y);
+    },
 
     mousedown: function(e) {
         this.offset.x = this.position.x - e.global.x;
@@ -38,6 +41,8 @@ SceneGame = game.Scene.extend({
     current: null,
 
     init: function() {
+        this._super();
+
         var panda;
 
         panda = new Panda(game.system.width / 2, game.system.height / 2 - 100);
@@ -52,17 +57,15 @@ SceneGame = game.Scene.extend({
         panda = new Panda(game.system.width / 2, game.system.height / 2 + 200);
         this.stage.addChild(panda);
 
-        var word = game.ua.mobile ? 'Touch' : 'Click';
+        var word = game.device.mobile ? 'Touch' : 'Click';
         text = new game.BitmapText(word + ' and drag sprites', {font:'HelveticaNeue'});
         text.position.x = game.system.width / 2 - text.textWidth / 2;
         text.position.y = game.system.height - 50;
         this.stage.addChild(text);
-
-        this._super();
     },
 
     mousemove: function(e) {
-        if(this.current) {
+        if (this.current) {
             this.current.position.x = e.global.x + this.current.offset.x;
             this.current.position.y = e.global.y + this.current.offset.y;
         }

@@ -9,12 +9,14 @@ game.module(
 )
 .body(function(){
 
-game.icon = 'media/icons/genius.png';
+game.icon = 'icons/genius.png';
 game.addAsset(game.icon);
 
 game.Scene.inject({
     init: function() {
-        var word = game.ua.mobile ? 'Touch' : 'Click';
+        this._super();
+        
+        var word = game.device.mobile ? 'Touch' : 'Click';
         text = new game.BitmapText(word + ' to change', {font:'HelveticaNeue'});
         text.position.x = game.system.width / 2 - text.textWidth / 2;
         text.position.y = game.system.height - 50;
@@ -27,10 +29,8 @@ game.Scene.inject({
         this.emitter.position.x = game.system.width / 2;
         this.emitter.position.y = game.system.height / 2;
         this.emitter.container = this.container;
-        this.emitter.textures.push('media/particle.png');
+        this.emitter.textures.push('particle.png');
         this.addEmitter(this.emitter);
-
-        this._super();
     },
 
     click: function() {
