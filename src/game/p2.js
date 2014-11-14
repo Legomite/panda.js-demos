@@ -2,20 +2,15 @@ game.module(
     'game.sprites'
 )
 .require(
-    'game.main',
-    'game.assets',
+    'engine.core',
     'plugins.p2'
 )
-.body(function(){
+.body(function() {
 
-game.icon = 'icons/die.png';
-game.addAsset(game.icon);
+game.addAsset('rectangle.png');
+game.addAsset('circle.png');
 
-game.addAsset('p2/bg.png');
-game.addAsset('p2/rectangle.png');
-game.addAsset('p2/circle.png');
-
-PhysicsObject = game.Class.extend({
+game.createClass('PhysicsObject', {
     size: 70,
 
     init: function(x, y) {
@@ -40,7 +35,7 @@ PhysicsObject = game.Class.extend({
         this.body.velocity[0] = Math.sin(angle) * force;
         this.body.velocity[1] = Math.cos(angle) * force;
 
-        this.sprite = new game.Sprite(shape.radius ? 'p2/circle.png' : 'p2/rectangle.png');
+        this.sprite = new game.Sprite(shape.radius ? 'circle.png' : 'rectangle.png');
         this.sprite.anchor.set(0.5, 0.5);
         this.sprite.position.set(x, y);
 
@@ -63,14 +58,10 @@ PhysicsObject = game.Class.extend({
     }
 });
 
-SceneGame = game.Scene.extend({
+game.createScene('Main', {
     init: function() {
-        var bg = new game.Sprite('p2/bg.png', game.system.width / 2, game.system.height / 2, {
-            anchor: { x: 0.5, y: 0.5 }
-        }).addTo(this.stage);
-
-        // Init world
-        this.world = new game.World({gravity: [0, 9]});
+        // Init physics world
+        this.world = new game.World({ gravity: [0, 9] });
         this.world.ratio = 100;
 
         // Add walls
@@ -98,14 +89,10 @@ SceneGame = game.Scene.extend({
         this.world.addBody(wallBody);
 
         this.addTimer(200, function() {
-            var object = new PhysicsObject(game.system.width / 2, game.system.height / 2);
+            var object = new game.PhysicsObject(game.system.width / 2, game.system.height / 2);
             game.scene.addObject(object);
         }, true);
-
-        this._super();
     }
 });
-
-game.start();
 
 });

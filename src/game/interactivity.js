@@ -2,76 +2,60 @@ game.module(
     'game.interactivity'
 )
 .require(
-    'engine.core',
-    'game.main',
-    'game.assets'
+    'engine.core'
 )
-.body(function(){
+.body(function() {
 
-game.icon = 'icons/cursor.png';
-game.addAsset(game.icon);
+game.addAsset('panda2.png');
 
-Panda = game.Sprite.extend({
-    interactive: true,
-    anchor: { x: 0.5, y: 0.5 },
-    offset: { x: 0, y: 0 },
-
+game.createClass('Panda', {
     init: function(x, y) {
-        this._super('panda2.png', x, y);
+        this.sprite = new game.Sprite('panda2.png');
+        this.sprite.anchor.set(0.5, 0.5);
+        this.sprite.position.set(x, y);
+        this.sprite.interactive = true;
+        this.sprite.buttonMode = true;
+        this.sprite.mousedown = this.sprite.touchstart = this.mousedown.bind(this);
+        this.sprite.mouseup = this.sprite.mouseupoutside = this.sprite.touchend = this.mouseup.bind(this);
+
+        this.offset = new game.Point();
     },
 
-    mousedown: function(e) {
-        this.offset.x = this.position.x - e.global.x;
-        this.offset.y = this.position.y - e.global.y;
+    mousedown: function(event) {
         game.scene.current = this;
-        this.scale.x = this.scale.y = 1.2;
+        this.offset.x = this.sprite.position.x - event.global.x;
+        this.offset.y = this.sprite.position.y - event.global.y;
+        
+        this.sprite.scale.set(1.2, 1.2);
+
+        // Place sprite to top of stage
+        this.sprite.remove();
+        this.sprite.addTo(game.scene.stage);
     },
 
     mouseup: function() {
         game.scene.current = null;
-        this.scale.x = this.scale.y = 1.0;
-    },
-
-    mouseupoutside: function() {
-        this.mouseup();
+        this.sprite.scale.set(1.0, 1.0);
     }
 });
 
-SceneGame = game.Scene.extend({
+game.createScene('Main', {
+    backgroundColor: 0xffffff,
     current: null,
 
     init: function() {
-        this._super();
-
-        var panda;
-
-        panda = new Panda(game.system.width / 2, game.system.height / 2 - 100);
-        this.stage.addChild(panda);
-
-        panda = new Panda(game.system.width / 2, game.system.height / 2);
-        this.stage.addChild(panda);
-
-        panda = new Panda(game.system.width / 2, game.system.height / 2 + 100);
-        this.stage.addChild(panda);
-
-        panda = new Panda(game.system.width / 2, game.system.height / 2 + 200);
-        this.stage.addChild(panda);
-
-        var word = game.device.mobile ? 'Touch' : 'Click';
-        text = new game.BitmapText(word + ' and drag sprites', {font:'HelveticaNeue'});
-        text.position.x = game.system.width / 2 - text.textWidth / 2;
-        text.position.y = game.system.height - 50;
-        this.stage.addChild(text);
+        for (var i = 0; i < 10; i++) {
+            var panda = new game.Panda(Math.random() * game.system.width, Math.random() * game.system.height);
+            this.stage.addChild(panda.sprite);
+        }
     },
 
-    mousemove: function(e) {
+    mousemove: function(event) {
         if (this.current) {
-            this.current.position.x = e.global.x + this.current.offset.x;
-            this.current.position.y = e.global.y + this.current.offset.y;
+            this.current.sprite.position.x = event.global.x + this.current.offset.x;
+            this.current.sprite.position.y = event.global.y + this.current.offset.y;
         }
     }
 });
-
-game.start();
 
 });

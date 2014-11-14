@@ -2,59 +2,41 @@ game.module(
     'game.sprites'
 )
 .require(
-    'engine.core',
-    'game.main',
-    'game.assets'
+    'engine.core'
 )
-.body(function(){
+.body(function() {
 
-game.icon = 'icons/image.png';
-game.addAsset(game.icon);
+game.addAsset('panda2.png');
 
-SceneGame = game.Scene.extend({
+game.createScene('Main', {
+    backgroundColor: 0xffffff,
+
     init: function() {
-        var sprite, text;
+        // Create new sprite
+        var sprite = new game.Sprite('panda2.png');
+        // Set position
+        sprite.position.set(100, 100);
+        // Add to stage
+        sprite.addTo(this.stage);
 
-        sprite = new game.Sprite('panda2.png', game.system.width / 2 - 200, 200, {anchor: {x:0.5, y:0.5}});
-        this.addTween(sprite.position, {x: game.system.width / 2 + 200}, 2000, {repeat: Infinity, yoyo: true}).start();
-        this.stage.addChild(sprite);
+        var sprite = new game.Sprite('panda2.png');
+        sprite.position.set(200, 200);
+        // Set scale
+        sprite.scale.set(2, 2);
+        sprite.addTo(this.stage);
 
-        sprite = new game.Sprite('panda2.png', game.system.width / 2 - 200, 400, {anchor: {x:0.5, y:0.5}});
-        this.addTween(sprite.scale, {x: 0, y: 0}, 2000, {repeat: Infinity, yoyo: true}).start();
-        this.stage.addChild(sprite);
+        var sprite = new game.Sprite('panda2.png');
+        sprite.position.set(400, 400);
+        // Rotate sprite
+        sprite.rotation = 0.2;
+        sprite.addTo(this.stage);
 
-        sprite = new game.Sprite('panda2.png', game.system.width / 2 + 200, 400, {anchor: {x:0.5, y:0.5}});
-        this.addTween(sprite, {rotation: Math.PI * 2}, 2000, {repeat: Infinity, yoyo: true}).start();
-        this.stage.addChild(sprite);
-
-        sprite = new game.Sprite('panda2.png', game.system.width / 2, 550, {anchor: {x:0.5, y:0.5}});
-        this.addTween(sprite, {alpha: 0}, 2000, {repeat: Infinity, yoyo: true}).start();
-        this.stage.addChild(sprite);
-
-        text = new game.BitmapText('Position', {font:'HelveticaNeue'});
-        text.position.x = game.system.width / 2 - text.textWidth / 2;
-        text.position.y = 250;
-        this.stage.addChild(text);
-
-        text = new game.BitmapText('Scale', {font:'HelveticaNeue'});
-        text.position.x = game.system.width / 2 - text.textWidth / 2 - 200;
-        text.position.y = 450;
-        this.stage.addChild(text);
-
-        text = new game.BitmapText('Rotation', {font:'HelveticaNeue'});
-        text.position.x = game.system.width / 2 - text.textWidth / 2 + 200;
-        text.position.y = 450;
-        this.stage.addChild(text);
-
-        text = new game.BitmapText('Alpha', {font:'HelveticaNeue'});
-        text.position.x = game.system.width / 2 - text.textWidth / 2;
-        text.position.y = 600;
-        this.stage.addChild(text);
-
-        this._super();
+        var sprite = new game.Sprite('panda2.png');
+        sprite.position.set(500, 500);
+        // Change opacity
+        sprite.alpha = 0.5;
+        sprite.addTo(this.stage);
     }
 });
-
-game.start();
 
 });
